@@ -10,13 +10,13 @@ _This application will allow the employer to create, view, update, and delete th
 
 ## Specifications
 
-#### When Player 1 and Player 2 both choose the same option the program returns the result as 'Draw'.
-* Input: "rock", "rock"
-* Output: "Draw"
+#### When the employer has not entered any entry for clients and runs database, it returns 0.
+* Input: {}
+* Output: 0
 
 
 ## Setup Instructions
-* 
+*
 
 
 ## Support and contact details
