@@ -14,7 +14,7 @@ namespace HairSalon
     }
 
     [Fact]
-    public void Test_CategoriesEmptyAtFirst()
+    public void Test_StylistsEmptyAtFirst()
     {
       //Arrange, Act
       int result = Stylist.GetAll().Count;
@@ -116,6 +116,35 @@ namespace HairSalon
       Assert.Equal(newName, result);
     }
 
+    [Fact]
+    public void Test_Delete_DeletesStylistFromDatabase()
+    {
+      //Arrange
+      string name1 = "Nancy Kestrel";
+      Stylist testStylist1 = new Stylist(name1);
+      testStylist1.Save();
+
+      string name2 = "Jason Moon";
+      Stylist testStylist2 = new Stylist(name2);
+      testStylist2.Save();
+
+      Client testClient1 = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345", testStylist1.GetId());
+      testClient1.Save();
+      Client testClient2 = new Client("Mary Ann", "123-123-1234", "2345 W 123rd Ave, NYC, NY 12345", testStylist2.GetId());
+      testClient2.Save();
+
+      //Act
+      testStylist1.Delete();
+      List<Stylist> resultStylists = Stylist.GetAll();
+      List<Stylist> testStylistList = new List<Stylist> {testStylist2};
+
+      List<Client> resultClients = Client.GetAll();
+      List<Client> testClientList = new List<Client> {testClient2};
+
+      //Assert
+      Assert.Equal(testStylistList, resultStylists);
+      Assert.Equal(testClientList, resultClients);
+    }
 
     public void Dispose()
     {
