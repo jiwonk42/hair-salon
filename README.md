@@ -18,6 +18,10 @@ _This application will allow the employer to create, view, update, and delete th
 * Input: "John Doe" "123-123-1234" "1234 NE 123rd ST, NYC, NY 12345"
 * Output: "John Doe" "123-123-1234" "1234 NE 123rd ST, NYC, NY 12345"
 
+#### When the employer finds a client by the ID it returns the ID.
+* Input: 1
+* Output: 1
+
 ## Setup Instructions
 *
 
