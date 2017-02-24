@@ -10,13 +10,15 @@ namespace HairSalon
     private string _name;
     private string _phone;
     private string _address;
+    private int _stylistId;
 
-    public Client(string Name, string Phone, string Address, int Id = 0)
+    public Client(string Name, string Phone, string Address, int StylistId, int Id = 0)
     {
       _id = Id;
       _name = Name;
       _phone = Phone;
       _address= Address;
+      _stylistId = StylistId;
     }
 
     public override bool Equals(System.Object otherClient)
@@ -28,11 +30,17 @@ namespace HairSalon
       else
       {
         Client newClient = (Client) otherClient;
-        bool nameEquality = (this.GetName() == newClient.GetName());
-        bool phoneEquality = (this.GetPhone() == newClient.GetPhone());
-        bool addressEquality = (this.GetAddress() == newClient.GetAddress());
-        return (nameEquality && phoneEquality && addressEquality);
+        bool nameEquality = this.GetName() == newClient.GetName();
+        bool phoneEquality = this.GetPhone() == newClient.GetPhone();
+        bool addressEquality = this.GetAddress() == newClient.GetAddress();
+        bool stylistEquality = this.GetStylistId() == newClient.GetStylistId();
+        return (nameEquality && phoneEquality && addressEquality && stylistEquality);
       }
+    }
+
+    public override int GetHashCode()
+    {
+         return this.GetName().GetHashCode();
     }
 
     public int GetId()
@@ -70,6 +78,16 @@ namespace HairSalon
       _address = newAddress;
     }
 
+    public int GetStylistId()
+    {
+      return _stylistId;
+    }
+
+    public void SetStylistId(int newStylistId)
+    {
+      _stylistId = newStylistId;
+    }
+
     public static List<Client> GetAll()
     {
       List<Client> allClients = new List<Client>{};
@@ -86,7 +104,8 @@ namespace HairSalon
         string clientName = rdr.GetString(1);
         string clientPhone = rdr.GetString(2);
         string clientAddress = rdr.GetString(3);
-        Client newClient = new Client(clientName, clientPhone, clientAddress, clientId);
+        int clientStylistId = rdr.GetInt32(4);
+        Client newClient = new Client(clientName, clientPhone, clientAddress, clientStylistId, clientId);
         allClients.Add(newClient);
       }
 
@@ -107,7 +126,7 @@ namespace HairSalon
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO clients (name, phone, address) OUTPUT INSERTED.id VALUES (@ClientName, @ClientPhone, @ClientAddress);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO clients (name, phone, address, stylist_id) OUTPUT INSERTED.id VALUES (@ClientName, @ClientPhone, @ClientAddress, @ClientStylistId);", conn);
 
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@ClientName";
@@ -121,9 +140,14 @@ namespace HairSalon
       addressParameter.ParameterName = "@ClientAddress";
       addressParameter.Value = this.GetAddress();
 
+      SqlParameter stylistIdParameter = new SqlParameter();
+      stylistIdParameter.ParameterName = "@ClientStylistId";
+      stylistIdParameter.Value = this.GetStylistId();
+
       cmd.Parameters.Add(nameParameter);
       cmd.Parameters.Add(phoneParameter);
       cmd.Parameters.Add(addressParameter);
+      cmd.Parameters.Add(stylistIdParameter);
 
       SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -157,6 +181,7 @@ namespace HairSalon
       string foundClientName = null;
       string foundClientPhone = null;
       string foundClientAddress = null;
+      int foundClientStylistId = 0;
 
       while(rdr.Read())
       {
@@ -164,8 +189,9 @@ namespace HairSalon
         foundClientName = rdr.GetString(1);
         foundClientPhone = rdr.GetString(2);
         foundClientAddress = rdr.GetString(3);
+        foundClientStylistId = rdr.GetInt32(4);
       }
-      Client foundClient = new Client(foundClientName, foundClientPhone, foundClientAddress, foundClientId);
+      Client foundClient = new Client(foundClientName, foundClientPhone, foundClientAddress, foundClientStylistId, foundClientId);
 
       if (rdr != null)
       {

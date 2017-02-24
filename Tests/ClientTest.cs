@@ -6,9 +6,9 @@ using System.Data.SqlClient;
 
 namespace HairSalon
 {
-  public class HairSalonTest : IDisposable
+  public class ClientTest : IDisposable
   {
-    public HairSalonTest()
+    public ClientTest()
     {
       DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=hair_salon_test;Integrated Security=SSPI;";
     }
@@ -24,10 +24,21 @@ namespace HairSalon
     }
 
     [Fact]
+    public void Test_EqualOverrideTrueForSameDescription()
+    {
+      //Arrange, Act
+      Client firstClient = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345", 1);
+      Client secondClient = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345", 1);
+
+      //Assert
+      Assert.Equal(firstClient, secondClient);
+    }
+
+    [Fact]
     public void Test_Save_SavesToDatabase()
     {
       //Arrange
-      Client testClient = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345");
+      Client testClient = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345", 1);
 
       //Act
       testClient.Save();
@@ -42,7 +53,7 @@ namespace HairSalon
     public void Test_Save_AssignsIdToObject()
     {
       //Arrange
-      Client testClient = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345");
+      Client testClient = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345", 1);
 
       //Act
       testClient.Save();
@@ -59,7 +70,7 @@ namespace HairSalon
     public void Test_Find_FindsClientInDatabase()
     {
       //Arrange
-      Client testClient = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345");
+      Client testClient = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345", 1);
       testClient.Save();
 
       //Act

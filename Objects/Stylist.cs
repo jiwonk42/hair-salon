@@ -26,11 +26,16 @@ namespace HairSalon
         else
         {
           Stylist newStylist = (Stylist) otherStylist;
-          bool idEquality = this.GetId() == newStylist.GetId();
-          bool nameEquality = this.GetName() == newStylist.GetName();
-          bool specializeEquality = this.GetSpecialize() == newStylist.GetSpecialize();
+          bool idEquality = (this.GetId() == newStylist.GetId());
+          bool nameEquality = (this.GetName() == newStylist.GetName());
+          bool specializeEquality = (this.GetSpecialize() == newStylist.GetSpecialize());
           return (idEquality && nameEquality && specializeEquality);
         }
+    }
+
+    public override int GetHashCode()
+    {
+         return this.GetName().GetHashCode();
     }
 
     public int GetId()
