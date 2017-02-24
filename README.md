@@ -10,10 +10,13 @@ _This application will allow the employer to create, view, update, and delete th
 
 ## Specifications
 
-#### When the employer has not entered any entry for clients and runs database, it returns 0.
-* Input: {}
+#### When the employer has not entered any entry for clients and runs database it returns 0.
+* Input:
 * Output: 0
 
+#### When the employer enters client's name, phone number, and address it returns the values for each string/argument.
+* Input: "John Doe" "123-123-1234" "1234 NE 123rd ST, NYC, NY 12345"
+* Output: "John Doe" "123-123-1234" "1234 NE 123rd ST, NYC, NY 12345"
 
 ## Setup Instructions
 *

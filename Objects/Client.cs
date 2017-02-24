@@ -19,6 +19,22 @@ namespace HairSalon
       _address= Address;
     }
 
+    public override bool Equals(System.Object otherClient)
+    {
+      if (!(otherClient is Client))
+      {
+        return false;
+      }
+      else
+      {
+        Client newClient = (Client) otherClient;
+        bool nameEquality = (this.GetName() == newClient.GetName());
+        bool phoneEquality = (this.GetPhone() == newClient.GetPhone());
+        bool addressEquality = (this.GetAddress() == newClient.GetAddress());
+        return (nameEquality && phoneEquality && addressEquality);
+      }
+    }
+
     public int GetId()
     {
       return _id;
@@ -84,6 +100,45 @@ namespace HairSalon
       }
 
       return allClients;
+    }
+
+    public void Save()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO clients (name, phone, address) OUTPUT INSERTED.id VALUES (@ClientName, @ClientPhone, @ClientAddress);", conn);
+
+      SqlParameter nameParameter = new SqlParameter();
+      nameParameter.ParameterName = "@ClientName";
+      nameParameter.Value = this.GetName();
+
+      SqlParameter phoneParameter = new SqlParameter();
+      phoneParameter.ParameterName = "@ClientPhone";
+      phoneParameter.Value = this.GetPhone();
+
+      SqlParameter addressParameter = new SqlParameter();
+      addressParameter.ParameterName = "@ClientAddress";
+      addressParameter.Value = this.GetAddress();
+
+      cmd.Parameters.Add(nameParameter);
+      cmd.Parameters.Add(phoneParameter);
+      cmd.Parameters.Add(addressParameter);
+
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._id = rdr.GetInt32(0);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
     }
 
     public static void DeleteAll()
