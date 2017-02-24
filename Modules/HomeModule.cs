@@ -39,7 +39,7 @@ namespace HairSalon
 
             // success.cshtml -> stylists.cshtml
             Post["/stylists/new"] = _ => {
-              Stylist newStylist = new Stylist(Request.Form["stylist-name"], Request.Form["stylist-specialize"]);
+              Stylist newStylist = new Stylist(Request.Form["stylist-name"]);
               newStylist.Save();
               return View["success.cshtml"];
             };
