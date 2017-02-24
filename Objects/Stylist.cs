@@ -8,13 +8,11 @@ namespace HairSalon
   {
     private int _id;
     private string _name;
-    private string _specialize;
 
-    public Stylist(string Name, string Specialize, int Id = 0)
+    public Stylist(string Name, int Id = 0)
     {
       _id = Id;
       _name = Name;
-      _specialize = Specialize;
     }
 
     public override bool Equals(System.Object otherStylist)
@@ -28,8 +26,8 @@ namespace HairSalon
           Stylist newStylist = (Stylist) otherStylist;
           bool idEquality = (this.GetId() == newStylist.GetId());
           bool nameEquality = (this.GetName() == newStylist.GetName());
-          bool specializeEquality = (this.GetSpecialize() == newStylist.GetSpecialize());
-          return (idEquality && nameEquality && specializeEquality);
+
+          return (idEquality && nameEquality);
         }
     }
 
@@ -53,16 +51,6 @@ namespace HairSalon
       _name = newName;
     }
 
-    public string GetSpecialize()
-    {
-      return _specialize;
-    }
-
-    public void SetSpecialize(string newSpecialize)
-    {
-      _specialize = newSpecialize;
-    }
-
     public static List<Stylist> GetAll()
     {
       List<Stylist> allStylists = new List<Stylist>{};
@@ -77,8 +65,7 @@ namespace HairSalon
       {
         int stylistId = rdr.GetInt32(0);
         string stylistName = rdr.GetString(1);
-        string stylistSpecialize = rdr.GetString(2);
-        Stylist newStylist = new Stylist(stylistName, stylistSpecialize, stylistId);
+        Stylist newStylist = new Stylist(stylistName, stylistId);
         allStylists.Add(newStylist);
       }
 
@@ -99,19 +86,12 @@ namespace HairSalon
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO stylists (name, specialization) OUTPUT INSERTED.id VALUES (@StylistName, @StylistSpecialize);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO stylists (name) OUTPUT INSERTED.id VALUES (@StylistName);", conn);
 
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@StylistName";
       nameParameter.Value = this.GetName();
-
-      SqlParameter specializeParameter = new SqlParameter();
-      specializeParameter.ParameterName = "@StylistSpecialize";
-      specializeParameter.Value = this.GetSpecialize();
-
       cmd.Parameters.Add(nameParameter);
-      cmd.Parameters.Add(specializeParameter);
-
       SqlDataReader rdr = cmd.ExecuteReader();
 
       while(rdr.Read())
@@ -128,6 +108,7 @@ namespace HairSalon
       }
     }
 
+
     public static Stylist Find(int id)
     {
       SqlConnection conn = DB.Connection();
@@ -142,15 +123,13 @@ namespace HairSalon
 
       int foundStylistId = 0;
       string foundStylistName = null;
-      string foundStylistSpecialize = null;
 
       while(rdr.Read())
       {
         foundStylistId = rdr.GetInt32(0);
         foundStylistName = rdr.GetString(1);
-        foundStylistSpecialize = rdr.GetString(2);
       }
-      Stylist foundStylist = new Stylist(foundStylistName, foundStylistSpecialize, foundStylistId);
+      Stylist foundStylist = new Stylist(foundStylistName, foundStylistId);
 
       if (rdr != null)
       {
@@ -195,6 +174,43 @@ namespace HairSalon
         conn.Close();
       }
       return clients;
+    }
+
+    public void Update(string newName)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("UPDATE stylists SET name = @NewName OUTPUT INSERTED.name WHERE id = @StylistId;", conn);
+
+      SqlParameter newNameParameter = new SqlParameter();
+      newNameParameter.ParameterName = "@NewName";
+      newNameParameter.Value = newName;
+
+
+      SqlParameter stylistIdParameter = new SqlParameter();
+      stylistIdParameter.ParameterName = "@StylistId";
+      stylistIdParameter.Value = this.GetId();
+
+      cmd.Parameters.Add(newNameParameter);
+      cmd.Parameters.Add(stylistIdParameter);
+
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._name = rdr.GetString(0);
+      }
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
     }
 
     public static void DeleteAll()

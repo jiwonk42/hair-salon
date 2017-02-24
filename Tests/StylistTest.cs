@@ -27,8 +27,8 @@ namespace HairSalon
     public void Test_Equal_ReturnsTrueForSameName()
     {
       //Arrange, Act
-      Stylist firstStylist = new Stylist("Bob Dylan", "Hair Coloring");
-      Stylist secondStylist = new Stylist("Bob Dylan", "Hair Coloring");
+      Stylist firstStylist = new Stylist("Bob Dylan");
+      Stylist secondStylist = new Stylist("Bob Dylan");
 
       //Assert
       Assert.Equal(firstStylist, secondStylist);
@@ -38,7 +38,7 @@ namespace HairSalon
     public void Test_Save_SavesStylistToDatabase()
     {
       //Arrange
-      Stylist testStylist = new Stylist("Bob Dylan", "Hair Coloring");
+      Stylist testStylist = new Stylist("Bob Dylan");
       testStylist.Save();
 
       //Act
@@ -53,7 +53,7 @@ namespace HairSalon
     public void Test_Save_AssignsIdToStylistObject()
     {
       //Arrange
-      Stylist testStylist = new Stylist("Bob Dylan", "Hair Coloring");
+      Stylist testStylist = new Stylist("Bob Dylan");
       testStylist.Save();
 
       //Act
@@ -70,7 +70,7 @@ namespace HairSalon
     public void Test_Find_FindsStylistInDatabase()
     {
       //Arrange
-      Stylist testStylist = new Stylist("Bob Dylan", "Hair Coloring");
+      Stylist testStylist = new Stylist("Bob Dylan");
       testStylist.Save();
 
       //Act
@@ -83,7 +83,7 @@ namespace HairSalon
     [Fact]
     public void Test_GetClients_RetrievesAllClientsWithStylist()
     {
-      Stylist testStylist = new Stylist("Bob Dylan", "Hair Coloring");
+      Stylist testStylist = new Stylist("Bob Dylan");
       testStylist.Save();
 
       Client firstClient = new Client("John Doe", "123-123-1234", "1234 NE 123rd ST, NYC, NY 12345", testStylist.GetId());
@@ -97,6 +97,25 @@ namespace HairSalon
 
       Assert.Equal(testClientList, resultClientList);
     }
+
+    [Fact]
+    public void Test_Update_UpdatesStylistInDatabase()
+    {
+      //Arrange
+      string name = "John Doe";
+      Stylist testStylist = new Stylist(name);
+      testStylist.Save();
+      string newName = "Mary Ann";
+
+      //Act
+      testStylist.Update(newName);
+
+      string result = testStylist.GetName();
+
+      //Assert
+      Assert.Equal(newName, result);
+    }
+
 
     public void Dispose()
     {
