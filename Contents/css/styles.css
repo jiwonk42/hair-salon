@@ -13,3 +13,15 @@
 .header h1, h3 {
     text-align: center;
 }
+
+ul li {
+    font-size: 20px;
+}
+
+.form-group {
+    font-size: 17px;
+}
+
+.delete {
+    font-size: 30px;
+}

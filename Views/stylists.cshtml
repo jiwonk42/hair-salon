@@ -1,21 +1,21 @@
 @{
-  Layout="Shared/_Layout.cshtml";
+    Layout="Shared/_Layout.cshtml";
 }
-<h1>Hair Salon</h1>
-<hr />
-<h2>Stylists:</h2>
+<h1>Stylists</h1>
+<hr>
+<h2>Staffs:</h2>
 <ul>
-  @if (Model.Count != 0)
-  {
-    @foreach (var stylist in Model)
+    @if (Model.Count != 0)
     {
-      <li><a href="/stylists/@stylist.GetId()">@stylist.GetName()</a> | <a href="/stylist/edit/@stylist.GetId()">Edit</a>| <a href="/stylist/delete/@stylist.GetId()">Delete</a></li>
+        @foreach (var stylist in Model)
+        {
+            <li><a href="/stylists/@stylist.GetId()">@stylist.GetName()</a> | <a href="/stylist/edit/@stylist.GetId()">Edit</a> | <a href="/stylist/delete/@stylist.GetId()">Delete</a></li>
+        }
     }
-  }
 </ul>
-<h4><a href="/stylists/new">Add a new stylist</a></h4>
-<h4><a href="/">Return home</a></h4>
-
-<form action="/stylists/clear" method="post">
-  <button type="submit">Clear all stylists</button>
+<form action="/stylists/delete" method="post">
+    <h4><a href="/stylists/new">Add New</a> |
+    <button class="btn" type="submit">Clear All</button></h4>
 </form>
+<hr>
+<h4><a href="/">Return Home</a></h4>

@@ -9,49 +9,32 @@ namespace HairSalon
         public HomeModule()
         {
             Get["/"] = _ => {
-                List<Stylist> AllStylists = Stylist.GetAll();
-                return View["index.cshtml", AllStylists];
+              List<Stylist> AllStylists = Stylist.GetAll();
+              return View["index.cshtml", AllStylists];
             };
-            Get["/clients"] = _ => {
-                List<Client> AllClients = Client.GetAll();
-                return View["clients.cshtml", AllClients];
-            };
-            Get["/stylists"] = _ => {
-                List<Stylist> AllStylists = Stylist.GetAll();
-                return View["stylists.cshtml", AllStylists];
-            };
-
 
             Get["/clients"] = _ => {
               List<Client> AllClients = Client.GetAll();
               return View["clients.cshtml", AllClients];
             };
+
             Get["/stylists"] = _ => {
               List<Stylist> AllStylists = Stylist.GetAll();
               return View["stylists.cshtml", AllStylists];
             };
 
-
             Get["/stylists/new"] = _ => {
               return View["stylists_form.cshtml"];
             };
-
-
-            // success.cshtml -> stylists.cshtml
             Post["/stylists/new"] = _ => {
               Stylist newStylist = new Stylist(Request.Form["stylist-name"]);
               newStylist.Save();
               return View["success.cshtml"];
             };
-
-
             Get["/clients/new"] = _ => {
               List<Stylist> AllStylists = Stylist.GetAll();
               return View["clients_form.cshtml", AllStylists];
             };
-
-
-            // success.cshtml -> clients.cshtml
             Post["/clients/new"] = _ => {
               Client newClient = new Client(Request.Form["client-name"], Request.Form["client-phone"], Request.Form["client-address"], Request.Form["stylist-id"]);
               newClient.Save();
@@ -62,7 +45,6 @@ namespace HairSalon
               Client.DeleteAll();
               return View["cleared.cshtml"];
             };
-
             Get["/stylists/{id}"] = parameters => {
               Dictionary<string, object> model = new Dictionary<string, object>();
               var SelectedStylist = Stylist.Find(parameters.id);
@@ -72,12 +54,7 @@ namespace HairSalon
               return View["stylist.cshtml", model];
             };
 
-            Get["stylist/edit/{id}"] = parameters => {
-              Stylist SelectedStylist = Stylist.Find(parameters.id);
-              return View["stylist_edit.cshtml", SelectedStylist];
-            };
-
-            Patch["stylist/edit/{id}"] = parameters => {
+            Patch["/stylist/edit/{id}"] = parameters => {
               Stylist SelectedStylist = Stylist.Find(parameters.id);
               SelectedStylist.Update(Request.Form["stylist-name"]);
               return View["success.cshtml"];

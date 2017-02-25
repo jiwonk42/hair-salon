@@ -1,7 +1,7 @@
 @{
   Layout="Shared/_Layout.cshtml";
 }
-<h2>Here are all the clients in this category:</h2>
+<h2>Here are all the clients with this stylist:</h2>
 
 @if (@Model["clients"].Count == 0)
 {
@@ -16,5 +16,6 @@ else
     }
   </ol>
 }
-<p><a href="/clients/new">Add a new client</a></p>
-<p><a href="/">Return to Main Page</a></p>
+<hr>
+<h4><a href="/clients/new">Add New</a></h4>
+<h4><a href="/">Return to Main Page</a></h4>
